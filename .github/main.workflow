@@ -8,10 +8,16 @@ action "login" {
   secrets = ["DOCKER_USERNAME", "DOCKER_PASSWORD"]
 }
 
-action "extract" {
+action "extract data" {
   needs = ["login"]
   uses = "docker://singularityhub/container-tree"
   args = ["--quiet generate --print data.json vanessa/salad", ">" "data.json"]
+}
+
+action "extract index" {
+  needs = ["login"]
+  uses = "docker://singularityhub/container-tree"
+  args = ["--quiet generate --print index.html vanessa/salad", ">" "index.html"]
 }
 
 action "deploy" {
