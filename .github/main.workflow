@@ -11,13 +11,13 @@ action "login" {
 action "extract data" {
   needs = ["login"]
   uses = "docker://singularityhub/container-tree"
-  args = ["--quiet generate --print data.json vanessa/salad", ">" "data.json"]
+  args = ["--quiet generate --print data.json vanessa/salad", ">", "data.json"]
 }
 
 action "extract index" {
   needs = ["login"]
   uses = "docker://singularityhub/container-tree"
-  args = ["--quiet generate --print index.html vanessa/salad", ">" "index.html"]
+  args = ["--quiet generate --print index.html vanessa/salad", ">", "index.html"]
 }
 
 action "deploy" {
