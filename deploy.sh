@@ -42,7 +42,9 @@ git init && \
     # Add the deploy files to the PWD, an empty github pages
     for DEPLOY_FILE in "${DEPLOY_FILES[@]}"
         do
-        cp ${DEPLOY_FILE} .
+        if [ ! -f "${DEPLOY_FILE}" ]; then
+            cp ${DEPLOY_FILE} .
+        fi
         git add $(basename "${DEPLOY_FILE}");
     done
 
