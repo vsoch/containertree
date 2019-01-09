@@ -14,10 +14,17 @@ action "extract" {
   args = ["--quiet generate --output=/github/workspace vanessa/salad"]
 }
 
+action "extract" {
+  needs = ["extract"]
+  uses = "actions/bin/sh@master"
+  runs = "ls"
+  args = ["/github/workspace"]
+}
+
 action "deploy" {
   needs = ["login", "extract"]
   uses = "actions/bin/sh@master"
   secrets = ["GITHUB_TOKEN"]
   runs = "/bin/bash"
-  args = ["/github/workspace/deploy.sh"]
+  args = ["/github/workspace/deploy.sh index.html data.json"]
 }
