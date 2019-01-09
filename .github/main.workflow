@@ -22,8 +22,7 @@ action "list" {
 
 action "deploy" {
   needs = ["login", "extract", "list"]
-  uses = "docker://singularityhub/container-tree"
+  uses = "vsoch/github-deploy@master"
   secrets = ["GITHUB_TOKEN"]
-  runs = "/github/workspace/deploy.sh"
   args = ["index.html data.json"]
 }
