@@ -40,8 +40,8 @@ action "deploy" {
   needs = ["login", "extract", "list"]
   uses = "docker://singularityhub/container-tree"
   secrets = ["GITHUB_TOKEN"]
-  runs = "/bin/bash"
-  args = ["/github/workspace/deploy.sh index.html data.json"]
+  runs = "/github/workspace/deploy.sh"
+  args = ["index.html data.json"]
 }
 ```
 
@@ -94,8 +94,8 @@ action "deploy" {
   needs = ["login", "extract", "list"]
   uses = "docker://singularityhub/container-tree"
   secrets = ["GITHUB_TOKEN"]
-  runs = "/bin/bash"
-  args = ["cd /github/workspace && ./deploy.sh index.html data.json"]
+  runs = "/github/workspace/deploy.sh"
+  args = ["index.html data.json"]
 }
 ```
 
