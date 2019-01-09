@@ -40,7 +40,7 @@ action "deploy" {
   needs = ["login", "extract", "list"]
   uses = "docker://singularityhub/container-tree"
   secrets = ["GITHUB_TOKEN"]
-  entrypoint = "/bin/bash"
+  runs = "/bin/bash"
   args = ["/github/workspace/deploy.sh index.html data.json"]
 }
 ```
@@ -92,8 +92,9 @@ action "list" {
 
 action "deploy" {
   needs = ["login", "extract", "list"]
-  uses = "actions/bin/sh@master"
+  uses = "docker://singularityhub/container-tree"
   secrets = ["GITHUB_TOKEN"]
+  runs = "/bin/bash"
   args = ["/github/workspace/deploy.sh index.html data.json"]
 }
 ```
@@ -127,4 +128,6 @@ action "list" {
 }
 ```
 
+Note that the above for container-diff is currently opened as a PR, so
+you should soon be able to use the uri `GoogleContainerTools/container-diff@master`.
 If you have any questions, please [open up an issue](https://www.github.com/vsoch/containertree)
