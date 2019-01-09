@@ -5,7 +5,7 @@ workflow "Run container-diff isolated" {
 
 action "Run container-diff" {
   uses = "vsoch/container-diff/actions@add/github-actions"
-  args = ["analyze remote://vanessa/salad --type=file --output=/github/workspace/data.json --json"]
+  args = "analyze vanessa/salad --type=file --output=/github/workspace/data.json --json"
 }
 
 action "list" {
