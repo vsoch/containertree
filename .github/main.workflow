@@ -14,4 +14,3 @@ action "list" {
   runs = "ls"
   args = ["/github/workspace"]
 }
-
