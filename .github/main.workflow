@@ -1,16 +1,23 @@
-workflow "Run container-diff isolated" {
+workflow "Deploy ContainerTree Extraction" {
   on = "push"
-  resolves = ["list"]
+  resolves = ["deploy"]
 }
 
-action "Run container-diff" {
-  uses = "vsoch/container-diff/actions@add/github-actions"
-  args = ["analyze vanessa/salad --type=file --output=/github/workspace/data.json --json"]
+action "login" {
+  uses = "actions/docker/login@master"
+  secrets = ["DOCKER_USERNAME", "DOCKER_PASSWORD"]
 }
 
-action "list" {
-  needs = ["Run container-diff"]
+action "extract" {
+  needs = ["login"]
+  uses = "docker://singularityhub/container-tree"
+  args = ["--quiet generate --print data.json vanessa/salad", ">" "data.json"]
+}
+
+action "deploy" {
+  needs = ["login", "extract"]
   uses = "actions/bin/sh@master"
-  runs = "ls"
-  args = ["/github/workspace"]
+  secrets = ["GITHUB_TOKEN"]
+  runs = "/bin/bash"
+  args = ["/github/workspace/deploy.sh"]
 }
