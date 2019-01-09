@@ -14,7 +14,7 @@ action "extract" {
   args = ["--quiet generate --output=/github/workspace vanessa/salad"]
 }
 
-action "extract" {
+action "list" {
   needs = ["extract"]
   uses = "actions/bin/sh@master"
   runs = "ls"
@@ -22,7 +22,7 @@ action "extract" {
 }
 
 action "deploy" {
-  needs = ["login", "extract"]
+  needs = ["login", "extract", "list"]
   uses = "actions/bin/sh@master"
   secrets = ["GITHUB_TOKEN"]
   runs = "/bin/bash"
