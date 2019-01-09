@@ -95,7 +95,7 @@ action "deploy" {
   uses = "docker://singularityhub/container-tree"
   secrets = ["GITHUB_TOKEN"]
   runs = "/bin/bash"
-  args = ["/github/workspace/deploy.sh index.html data.json"]
+  args = ["cd /github/workspace && ./deploy.sh index.html data.json"]
 }
 ```
 
