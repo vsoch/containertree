@@ -1,0 +1,17 @@
+workflow "Run container-diff isolated" {
+  on = "push"
+  resolves = ["list"]
+}
+
+action "Run container-diff" {
+  uses = "vsoch/container-dirr/actions@add/github-actions"
+  args = ["analyze", "vanessa/salad", "--type=pip", "type=apt", "--type=history", --output "/github/workspace/data.json", "--type=file", "--json", "--quiet", "--verbosity=panic" ]
+}
+
+action "list" {
+  needs = ["Run container-diff"]
+  uses = "actions/bin/sh@master"
+  runs = "ls"
+  args = ["/github/workspace"]
+}
+
