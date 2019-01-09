@@ -8,20 +8,25 @@ action "login" {
   secrets = ["DOCKER_USERNAME", "DOCKER_PASSWORD"]
 }
 
-action "extract data" {
-  needs = ["login"]
-  uses = "docker://singularityhub/container-tree"
-  args = ["--quiet generate --print data.json vanessa/salad", ">", "data.json"]
+action "run" {
+  uses = "actions/docker/cli@master"
+  args = ["run", "-d", "--entrypoint", "/bin/bash", "--name", "containertree" , "singularityhub/container-tree"]
 }
 
-action "extract index" {
-  needs = ["login"]
-  uses = "docker://singularityhub/container-tree"
-  args = ["--quiet generate --print index.html vanessa/salad", ">", "index.html"]
+action "extract" {
+  needs = ["login", "run"]
+  uses = "actions/docker/cli@master"
+  args = ["exec containertree --quiet generate --output=/data vanessa/salad"]
+}
+
+action "copy" {
+  needs = ["login", "run", "extract"]
+  uses = "actions/docker/cli@master"
+  args = ["cp containertree:/data /github/workspace/docs"]
 }
 
 action "deploy" {
-  needs = ["login", "extract data", "extract index"]
+  needs = ["login", "run", "extract", "copy"]
   uses = "actions/bin/sh@master"
   secrets = ["GITHUB_TOKEN"]
   runs = "/bin/bash"
