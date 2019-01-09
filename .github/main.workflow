@@ -21,7 +21,7 @@ action "extract index" {
 }
 
 action "deploy" {
-  needs = ["login", "extract"]
+  needs = ["login", "extract data", "extract index"]
   uses = "actions/bin/sh@master"
   secrets = ["GITHUB_TOKEN"]
   runs = "/bin/bash"
