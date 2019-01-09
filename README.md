@@ -24,34 +24,41 @@ action "login" {
   secrets = ["DOCKER_USERNAME", "DOCKER_PASSWORD"]
 }
 
-action "extract data" {
-  needs = ["login"]
+action "extract" {
   uses = "docker://singularityhub/container-tree"
-  args = ["--quiet generate --print data.json vanessa/salad", ">", "data.json"]
+  args = ["--quiet generate --output=/github/workspace vanessa/salad"]
 }
 
-action "extract index" {
-  needs = ["login"]
-  uses = "docker://singularityhub/container-tree"
-  args = ["--quiet generate --print index.html vanessa/salad", ">", "index.html"]
+action "list" {
+  needs = ["extract"]
+  uses = "actions/bin/sh@master"
+  runs = "ls"
+  args = ["/github/workspace"]
 }
 
 action "deploy" {
-  needs = ["login", "extract data", "extract index"]
+  needs = ["login", "extract", "list"]
   uses = "actions/bin/sh@master"
   secrets = ["GITHUB_TOKEN"]
-  runs = "/bin/bash"
-  args = ["/github/workspace/deploy.sh"]
+  args = ["/github/workspace/deploy.sh index.html data.json"]
 }
 ```
 
+In the above, we are:
+
+ 1. Logging in to the docker daemon, in case we wanted to push
+ 2. Using the SingularityHub ContainerTree container to extract static files to the github workspace
+ 3. For our own debugging, listing the files in the workspace after generation
+ 4. Deploying back to Github Pages
+
 If you have a Dockerfile in your repository, then you can build and deploy it,
-and then generate its tree for Github pages!
+and then generate its tree for Github pages! Notice below we've added
+steps to build and push.
 
 ```
 workflow "Deploy ContainerTree Extraction" {
   on = "push"
-  resolves = ["Extract ContainerTree"]
+  resolves = ["deploy"]
 }
 
 action "login" {
@@ -70,18 +77,26 @@ action "push" {
   args = "push vanessa/salad"
 }
 
-action "Extract ContainerTree" {
-  needs = ["build", "list"]
-  uses = "docker://openschemas/extractors:ContainerTree"
+action "extract" {
+  uses = "docker://singularityhub/container-tree"
+  args = ["--quiet generate --output=/github/workspace vanessa/salad"]
+}
+
+action "list" {
+  needs = ["extract"]
+  uses = "actions/bin/sh@master"
+  runs = "ls"
+  args = ["/github/workspace"]
+}
+
+action "deploy" {
+  needs = ["login", "extract", "list"]
+  uses = "actions/bin/sh@master"
   secrets = ["GITHUB_TOKEN"]
-  env = {
-    IMAGE_THUMBNAIL = "https://vsoch.github.io/datasets/assets/img/avocado.png"
-    IMAGE_ABOUT = "Generate ascii art for a fork or spoon, along with a pun."
-    IMAGE_DESCRIPTION = "alpine base with GoLang and PUNS."
-  }
-  args = ["extract", "--name", "vanessa/salad", "--contact", "@vsoch", "--filename", "/github/workspace/Dockerfile", "--deploy"]
+  args = ["/github/workspace/deploy.sh index.html data.json"]
 }
 ```
+
 When you deploy to Github pages for the first time, you
 need to switch Github Pages to deploy from master and then back to the `gh-pages`
 branch on deploy. There is a known issue with Permissions if you deploy
