@@ -49,7 +49,7 @@ In the above, we are:
  1. Logging in to the docker daemon, in case we wanted to push
  2. Using the SingularityHub ContainerTree container to extract static files to the github workspace
  3. For our own debugging, listing the files in the workspace after generation
- 4. Deploying back to Github Pages
+ 4. Deploying back to Github Pages using the [vsoch/github-deploy](https://github.com/vsoch/github-deploy) repository.
 
 If you have a Dockerfile in your repository, then you can build and deploy it,
 and then generate its tree for Github pages! Notice below we've added
