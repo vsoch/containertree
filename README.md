@@ -126,6 +126,6 @@ action "list" {
 }
 ```
 
-Note that the above for container-diff is currently opened as a PR, so
+Note that the above for container-diff is currently opened as a pull request, so
 you should soon be able to use the uri `GoogleContainerTools/container-diff@master`.
 If you have any questions, please [open up an issue](https://www.github.com/vsoch/containertree)

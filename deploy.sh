@@ -8,7 +8,7 @@
 
 DEPLOY_FILES="${1:-}"
 
-for DEPLOY_FILE in $("${DEPLOY_FILES}")
+for DEPLOY_FILE in "${DEPLOY_FILES}"
     do
         if [ ! -f "${DEPLOY_FILE}" ]; then
         echo "Cannot find ${DEPLOY_FILE}";
