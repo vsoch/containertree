@@ -97,7 +97,7 @@ action "deploy" {
 }
 ```
 
-When you deploy to Github pages for the first time, you
+When you deploy to Github pages for the first time, you will
 need to switch Github Pages to deploy from master and then back to the `gh-pages`
 branch on deploy. There is a known issue with Permissions if you deploy
 to the brain without activating it (as an admin) from the respository first.
